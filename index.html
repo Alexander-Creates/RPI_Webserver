@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Pi GPIO Control</title>
+  <style>
+    button{font-size:18px;padding:10px 20px;margin:6px}
+  </style>
+</head>
+<body>
+  <h1>GPIO Control</h1>
+  <div>
+    <button onclick="setPin(17,1)">GPIO17 ON</button>
+    <button onclick="setPin(17,0)">GPIO17 OFF</button>
+  </div>
+  <pre id="status"></pre>
+
+  <script>
+    async function setPin(pin, state){
+      const url = `/cgi-bin/gpio_control.py?pin=${pin}&state=${state}`;
+      document.getElementById('status').textContent = 'sending...';
+      try{
+        const r = await fetch(url);
+        const txt = await r.text();
+        document.getElementById('status').textContent = txt;
+      } catch(e){
+        document.getElementById('status').textContent = 'Fetch error: '+e;
+      }
+    }
+  </script>
+</body>
+</html>
